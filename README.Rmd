@@ -1,0 +1,37 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  warning = FALSE,
+  error = FALSE,
+  message = FALSE,
+  comment = "#>"
+)
+```
+
+# Projeto de Pesquisa - Efeito do ABA na maturação da cana-de-açúcar
+
+Pizani, GA; Panosso, AR; Cardozo, NP; Silva, MA
+
+
+## Carregando Pacotes
+```{r}
+library(tidyverse)
+```
+
+
+## Carregando o Banco de dados
+```{r}
+data_set <- read_rds("data/data-set-principal.rds")
+```
+
+## Início da validação dos dados
+```{r}
+skimr::skim(data_set)
+```
+
