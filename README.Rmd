@@ -22,16 +22,106 @@ Pizani, GA; Panosso, AR; Cardozo, NP; Silva, MA
 ## Carregando Pacotes
 ```{r}
 library(tidyverse)
+library(agricolae)
+library(ExpDes.pt)
 ```
 
 
 ## Carregando o Banco de dados
 ```{r}
 data_set <- read_rds("data/data-set-principal.rds")
+glimpse(data_set)
 ```
 
 ## Início da validação dos dados
 ```{r}
 skimr::skim(data_set)
+```
+
+
+## Análise de variância para `e_n` no delineamento em blocos casualizados
+
+nesse delineamento consideramos dois efeitos, o de bloco e o dos tratamentos, a partir do seguinte modelo de anova (teste F de Snedecor ao nível de $5\%$ de probabilidade)
+
+$$y_{ij} = \mu + \alpha_i + \beta_j + \epsilon_{ij}$$
+Pressupostos:  
+  1. Efeitos são aditivos  
+  2. Erros são independentes  e aleatórios
+  3. Erros são normais  
+  4. Existe igualdade entre as variâncias dos tratamentos (homocedasticidade)  
+
+### Recorte do banco de dados
+```{r}
+data_set_aux <- data_set |> 
+  select(c(faz:bloco,e_n)) |> 
+  mutate(
+    trat = as_factor(trat) 
+  ) |> 
+  drop_na()
+glimpse(data_set_aux)
+```
+
+### Gerar o modelo previamento definido
+
+```{r}
+mod_dbc <- aov(e_n ~ trat + bloco,
+               data=data_set_aux)
+anova(mod_dbc)
+```
+
+![](img/img-01-Ftest.png)
+
+### Teste de Pessuposto: Normalidade dos resíduos
+
+$H_0$: Os dados de resíduos studentizados seguem uma distribuição normal
+
+$H_1$: Os dados de resíduos studentizados **não** seguem uma distribuição normal.
+
+```{r}
+rs <- rstudent(mod_dbc)
+hist(rs)
+shapiro.test(rs)
+```
+
+### Teste de Pessuposto: Homocedasticidade (igualdade entre as variâncias dos tratamentos)
+
+```{r}
+data_set_aux |> 
+  ggplot(aes(y=e_n, x=trat, fill=trat)) + 
+  geom_boxplot() +
+  theme_bw()
+```
+Teste de levene para homocedasticidade
+
+$H_0$: Os dados são homocedásticos
+
+$H_1$: Os dados **não** são homocedásticos
+
+```{r}
+y <- data_set_aux |> pull(e_n)
+trat <- data_set_aux |> pull(trat)
+lawstat::levene.test(y,trat,location = "median")
+```
+
+## Teste F como Tukey
+```{r}
+y <- data_set_aux |> pull(e_n)
+trat <- data_set_aux |> pull(trat)
+bloco <- data_set_aux |> pull(bloco)
+ExpDes.pt::dbc(trat, bloco, y, quali = TRUE, mcomp = "tukey")
+```
+
+### Regressão das doses
+
+```{r}
+data_set_aux |> 
+  filter(dose != 999) |> 
+  group_by(dose) |>
+  summarise(e_n = mean(e_n, na.rm = TRUE)) |>
+  ggplot(aes(x=dose, y=e_n, colour = as_factor(dose))) +
+  geom_point() +
+  geom_line() +
+  theme_bw()+
+  labs(color = "Dose")
 ```
 

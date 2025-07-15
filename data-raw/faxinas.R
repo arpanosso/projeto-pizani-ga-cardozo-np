@@ -7,9 +7,19 @@ dados <- readxl::read_xlsx("data-raw/DADOS GERAIS Mestrado 08.07.25.xlsx") |>
   select(-parcela, -tn, -rep) |>
   mutate(
     bloco = ifelse(bloco == "B3.1", "B3.2",bloco),
-    bloco = str_remove(bloco,".[:digit:]$")
+    bloco = str_remove(bloco,".[:digit:]$"),
+    dose = case_when(
+      trat == 1 ~ 0,
+      trat == 2 ~0.04,
+      trat == 3 ~0.08,
+      trat == 4 ~0.16,
+      trat == 5 ~0.32,
+      trat == 6 ~0.64,
+      trat == 7 ~999,
+      trat == 8 ~999,
+    )
     ) |>
-  group_by(data,faz,trat,bloco) |>
+  group_by(data,faz,trat,dose,bloco) |>
   summarise(
     across(.cols = peso:e_n_medio, .fns = ~mean(.,na.rm=TRUE),
            .names = "{.col}"
