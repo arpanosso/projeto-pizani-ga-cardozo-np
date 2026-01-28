@@ -1,5 +1,5 @@
 ---
-title: "Análise Tecnológica"
+title: "Análise Produção"
 author: "Panosso, AR"
 date: "2026-01-28"
 output: html_document
@@ -25,21 +25,14 @@ library(ExpDes.pt)
 
 #### Carregando o Banco de dados
 ```{r}
-data_set <- read_rds("../data/data-set-tecnologica.rds") |> 
-  group_by(faz,dose,bloco) |> 
-  summarise(across(
-    .cols = peso:atr,
-    .fns = mean,na.rm=TRUE,
-    .names = "{.col}"
-  )) |> 
-  ungroup()
+data_set <- read_rds("../data/data-set-producao.rds")
 glimpse(data_set)
 ```
 
 #### Análise de Variância - com teste de pressupostos
 
 ```{r}
-names_variable <- data_set |> select(peso:atr) |> names()
+names_variable <- data_set |> select(tch1:tah6) |> names()
 walk(names_variable, ~{
   data_set_aux <- data_set |> 
     select(c(faz:bloco,!!sym(.x))) |> 
@@ -99,4 +92,3 @@ walk(names_variable, ~{
 })
 
 ```
-

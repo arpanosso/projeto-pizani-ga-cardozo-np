@@ -86,7 +86,7 @@ write_rds(bases_tecnologica, "data/data-set-tecnologica.rds")
 bases_producao <- dados |>
   filter(tipo == "producao") |>
   select(id:parcela,tch1:tah6)
-glimpse(bases_tecnologica)
+glimpse(bases_producao)
 
 ## salvando o banco de dados para análise
 write_rds(bases_producao, "data/data-set-producao.rds")
@@ -107,5 +107,5 @@ bases_enzima <- dados |>
 glimpse(bases_enzima)
 
 ## salvando o banco de dados para análise
-write_rds(bases_enzima, "data/data-set-trocas-enzima.rds")
+write_rds(bases_enzima, "data/data-set-analise-enzima.rds")
 

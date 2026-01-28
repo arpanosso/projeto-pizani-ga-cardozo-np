@@ -422,10 +422,10 @@ walk(names_variable, ~{
       filter(faz == fazenda[i],
              dose != 999
              )
-    y &lt;- df_aux  |&gt; pull(!!sym(.x))
-    trat &lt;- df_aux  |&gt; pull(trat)
+    yd &lt;- df_aux  |&gt; pull(!!sym(.x))
+    dose &lt;- df_aux  |&gt; pull(dose) |&gt; as.numeric()
     bloco &lt;- df_aux  |&gt; pull(bloco)
-    dbc(trat,bloco,y,quali = FALSE, mcomp = &quot;tukey&quot;)
+    dbc(dose,bloco,yd,quali = FALSE, mcomp = &quot;tukey&quot;)
     
     plot_reg &lt;- df_aux |&gt; 
       group_by(dose) |&gt; 
@@ -559,7 +559,7 @@ walk(names_variable, ~{
 #&gt;  deviations from the median
 #&gt; 
 #&gt; data:  y
-#&gt; Test Statistic = 1.5062, p-value = 0.2371
+#&gt; Test Statistic = 1.4534, p-value = 0.242
 #&gt; 
 #&gt; [1] &quot;||======= ANOVA para: peso ; Fazenda: 146 =======||&quot;
 #&gt; ------------------------------------------------------------------------
@@ -664,7 +664,7 @@ walk(names_variable, ~{
 #&gt;  deviations from the median
 #&gt; 
 #&gt; data:  y
-#&gt; Test Statistic = 0.59383, p-value = 0.705
+#&gt; Test Statistic = 0.6016, p-value = 0.726
 #&gt; 
 #&gt; [1] &quot;||======= ANOVA para: media_peso ; Fazenda: 49 =======||&quot;
 #&gt; ------------------------------------------------------------------------
@@ -769,7 +769,7 @@ walk(names_variable, ~{
 #&gt;  deviations from the median
 #&gt; 
 #&gt; data:  y
-#&gt; Test Statistic = 1.5062, p-value = 0.2371
+#&gt; Test Statistic = 1.4534, p-value = 0.242
 #&gt; 
 #&gt; [1] &quot;||======= ANOVA para: media_peso ; Fazenda: 146 =======||&quot;
 #&gt; ------------------------------------------------------------------------
@@ -874,7 +874,7 @@ walk(names_variable, ~{
 #&gt;  deviations from the median
 #&gt; 
 #&gt; data:  y
-#&gt; Test Statistic = 0.59383, p-value = 0.705
+#&gt; Test Statistic = 0.6016, p-value = 0.726
 #&gt; 
 #&gt; [1] &quot;||======= ANOVA para: altura ; Fazenda: 49 =======||&quot;
 #&gt; ------------------------------------------------------------------------
@@ -980,7 +980,7 @@ walk(names_variable, ~{
 #&gt;  deviations from the median
 #&gt; 
 #&gt; data:  y
-#&gt; Test Statistic = 0.34892, p-value = 0.8762
+#&gt; Test Statistic = 0.34008, p-value = 0.9078
 #&gt; 
 #&gt; [1] &quot;||======= ANOVA para: altura ; Fazenda: 146 =======||&quot;
 #&gt; ------------------------------------------------------------------------
@@ -1086,7 +1086,7 @@ walk(names_variable, ~{
 #&gt;  deviations from the median
 #&gt; 
 #&gt; data:  y
-#&gt; Test Statistic = 0.30767, p-value = 0.9019
+#&gt; Test Statistic = 0.27098, p-value = 0.9444
 #&gt; 
 #&gt; [1] &quot;||======= ANOVA para: altura_media ; Fazenda: 49 =======||&quot;
 #&gt; ------------------------------------------------------------------------
@@ -1191,7 +1191,7 @@ walk(names_variable, ~{
 #&gt;  deviations from the median
 #&gt; 
 #&gt; data:  y
-#&gt; Test Statistic = 0.77502, p-value = 0.5802
+#&gt; Test Statistic = 0.74631, p-value = 0.6189
 #&gt; 
 #&gt; [1] &quot;||======= ANOVA para: altura_media ; Fazenda: 146 =======||&quot;
 #&gt; ------------------------------------------------------------------------
@@ -1296,7 +1296,7 @@ walk(names_variable, ~{
 #&gt;  deviations from the median
 #&gt; 
 #&gt; data:  y
-#&gt; Test Statistic = 0.3049, p-value = 0.9036
+#&gt; Test Statistic = 0.26322, p-value = 0.948
 #&gt; 
 #&gt; [1] &quot;||======= ANOVA para: e_n ; Fazenda: 49 =======||&quot;
 #&gt; ------------------------------------------------------------------------
@@ -1401,7 +1401,7 @@ walk(names_variable, ~{
 #&gt;  deviations from the median
 #&gt; 
 #&gt; data:  y
-#&gt; Test Statistic = 0.83014, p-value = 0.5449
+#&gt; Test Statistic = 0.88, p-value = 0.5263
 #&gt; 
 #&gt; [1] &quot;||======= ANOVA para: e_n ; Fazenda: 146 =======||&quot;
 #&gt; ------------------------------------------------------------------------
@@ -1506,7 +1506,7 @@ walk(names_variable, ~{
 #&gt;  deviations from the median
 #&gt; 
 #&gt; data:  y
-#&gt; Test Statistic = 0.57073, p-value = 0.7215
+#&gt; Test Statistic = 0.70161, p-value = 0.6515
 #&gt; 
 #&gt; [1] &quot;||======= ANOVA para: e_n_medio ; Fazenda: 49 =======||&quot;
 #&gt; ------------------------------------------------------------------------
@@ -1611,7 +1611,7 @@ walk(names_variable, ~{
 #&gt;  deviations from the median
 #&gt; 
 #&gt; data:  y
-#&gt; Test Statistic = 0.83014, p-value = 0.5449
+#&gt; Test Statistic = 0.88, p-value = 0.5263
 #&gt; 
 #&gt; [1] &quot;||======= ANOVA para: e_n_medio ; Fazenda: 146 =======||&quot;
 #&gt; ------------------------------------------------------------------------
@@ -1716,7 +1716,7 @@ walk(names_variable, ~{
 #&gt;  deviations from the median
 #&gt; 
 #&gt; data:  y
-#&gt; Test Statistic = 0.57073, p-value = 0.7215
+#&gt; Test Statistic = 0.70161, p-value = 0.6515
 #&gt; 
 #&gt; [1] &quot;||======= ANOVA para: ph ; Fazenda: 49 =======||&quot;
 #&gt; ------------------------------------------------------------------------
@@ -1822,7 +1822,7 @@ walk(names_variable, ~{
 #&gt;  deviations from the median
 #&gt; 
 #&gt; data:  y
-#&gt; Test Statistic = 1.0831, p-value = 0.4028
+#&gt; Test Statistic = 1.1049, p-value = 0.3924
 #&gt; 
 #&gt; [1] &quot;||======= ANOVA para: ph ; Fazenda: 146 =======||&quot;
 #&gt; ------------------------------------------------------------------------
@@ -1927,7 +1927,7 @@ walk(names_variable, ~{
 #&gt;  deviations from the median
 #&gt; 
 #&gt; data:  y
-#&gt; Test Statistic = 0.47586, p-value = 0.7895
+#&gt; Test Statistic = 0.4429, p-value = 0.8417
 #&gt; 
 #&gt; [1] &quot;||======= ANOVA para: brix ; Fazenda: 49 =======||&quot;
 #&gt; ------------------------------------------------------------------------
@@ -2032,7 +2032,7 @@ walk(names_variable, ~{
 #&gt;  deviations from the median
 #&gt; 
 #&gt; data:  y
-#&gt; Test Statistic = 0.36719, p-value = 0.8644
+#&gt; Test Statistic = 0.41566, p-value = 0.8603
 #&gt; 
 #&gt; [1] &quot;||======= ANOVA para: brix ; Fazenda: 146 =======||&quot;
 #&gt; ------------------------------------------------------------------------
@@ -2137,7 +2137,7 @@ walk(names_variable, ~{
 #&gt;  deviations from the median
 #&gt; 
 #&gt; data:  y
-#&gt; Test Statistic = 0.51594, p-value = 0.7608
+#&gt; Test Statistic = 0.43237, p-value = 0.849
 #&gt; 
 #&gt; [1] &quot;||======= ANOVA para: pol ; Fazenda: 49 =======||&quot;
 #&gt; ------------------------------------------------------------------------
@@ -2244,7 +2244,7 @@ walk(names_variable, ~{
 #&gt;  deviations from the median
 #&gt; 
 #&gt; data:  y
-#&gt; Test Statistic = 1.0073, p-value = 0.4418
+#&gt; Test Statistic = 0.86672, p-value = 0.5352
 #&gt; 
 #&gt; [1] &quot;||======= ANOVA para: pol ; Fazenda: 146 =======||&quot;
 #&gt; ------------------------------------------------------------------------
@@ -2349,7 +2349,7 @@ walk(names_variable, ~{
 #&gt;  deviations from the median
 #&gt; 
 #&gt; data:  y
-#&gt; Test Statistic = 0.20251, p-value = 0.9572
+#&gt; Test Statistic = 0.22854, p-value = 0.9627
 #&gt; 
 #&gt; [1] &quot;||======= ANOVA para: pureza ; Fazenda: 49 =======||&quot;
 #&gt; ------------------------------------------------------------------------
@@ -2454,7 +2454,7 @@ walk(names_variable, ~{
 #&gt;  deviations from the median
 #&gt; 
 #&gt; data:  y
-#&gt; Test Statistic = 1.6832, p-value = 0.1896
+#&gt; Test Statistic = 1.6642, p-value = 0.1793
 #&gt; 
 #&gt; [1] &quot;||======= ANOVA para: pureza ; Fazenda: 146 =======||&quot;
 #&gt; ------------------------------------------------------------------------
@@ -2559,7 +2559,7 @@ walk(names_variable, ~{
 #&gt;  deviations from the median
 #&gt; 
 #&gt; data:  y
-#&gt; Test Statistic = 0.55059, p-value = 0.736
+#&gt; Test Statistic = 0.81195, p-value = 0.5724
 #&gt; 
 #&gt; [1] &quot;||======= ANOVA para: ar ; Fazenda: 49 =======||&quot;
 #&gt; ------------------------------------------------------------------------
@@ -2664,7 +2664,7 @@ walk(names_variable, ~{
 #&gt;  deviations from the median
 #&gt; 
 #&gt; data:  y
-#&gt; Test Statistic = 1.6215, p-value = 0.205
+#&gt; Test Statistic = 1.6016, p-value = 0.1961
 #&gt; 
 #&gt; [1] &quot;||======= ANOVA para: ar ; Fazenda: 146 =======||&quot;
 #&gt; ------------------------------------------------------------------------
@@ -2769,7 +2769,7 @@ walk(names_variable, ~{
 #&gt;  deviations from the median
 #&gt; 
 #&gt; data:  y
-#&gt; Test Statistic = 0.52578, p-value = 0.7538
+#&gt; Test Statistic = 0.78349, p-value = 0.5924
 #&gt; 
 #&gt; [1] &quot;||======= ANOVA para: pc ; Fazenda: 49 =======||&quot;
 #&gt; ------------------------------------------------------------------------
@@ -2876,7 +2876,7 @@ walk(names_variable, ~{
 #&gt;  deviations from the median
 #&gt; 
 #&gt; data:  y
-#&gt; Test Statistic = 1.0824, p-value = 0.4031
+#&gt; Test Statistic = 0.94733, p-value = 0.4832
 #&gt; 
 #&gt; [1] &quot;||======= ANOVA para: pc ; Fazenda: 146 =======||&quot;
 #&gt; ------------------------------------------------------------------------
@@ -2981,7 +2981,7 @@ walk(names_variable, ~{
 #&gt;  deviations from the median
 #&gt; 
 #&gt; data:  y
-#&gt; Test Statistic = 0.14897, p-value = 0.9778
+#&gt; Test Statistic = 0.17511, p-value = 0.9807
 #&gt; 
 #&gt; [1] &quot;||======= ANOVA para: ar_atr ; Fazenda: 49 =======||&quot;
 #&gt; ------------------------------------------------------------------------
@@ -3086,7 +3086,7 @@ walk(names_variable, ~{
 #&gt;  deviations from the median
 #&gt; 
 #&gt; data:  y
-#&gt; Test Statistic = 1.5963, p-value = 0.2116
+#&gt; Test Statistic = 1.5701, p-value = 0.205
 #&gt; 
 #&gt; [1] &quot;||======= ANOVA para: ar_atr ; Fazenda: 146 =======||&quot;
 #&gt; ------------------------------------------------------------------------
@@ -3191,7 +3191,7 @@ walk(names_variable, ~{
 #&gt;  deviations from the median
 #&gt; 
 #&gt; data:  y
-#&gt; Test Statistic = 0.42742, p-value = 0.8236
+#&gt; Test Statistic = 0.62749, p-value = 0.7066
 #&gt; 
 #&gt; [1] &quot;||======= ANOVA para: fibra ; Fazenda: 49 =======||&quot;
 #&gt; ------------------------------------------------------------------------
@@ -3297,7 +3297,7 @@ walk(names_variable, ~{
 #&gt;  deviations from the median
 #&gt; 
 #&gt; data:  y
-#&gt; Test Statistic = 0.38635, p-value = 0.8516
+#&gt; Test Statistic = 0.32258, p-value = 0.9177
 #&gt; 
 #&gt; [1] &quot;||======= ANOVA para: fibra ; Fazenda: 146 =======||&quot;
 #&gt; ------------------------------------------------------------------------
@@ -3402,7 +3402,7 @@ walk(names_variable, ~{
 #&gt;  deviations from the median
 #&gt; 
 #&gt; data:  y
-#&gt; Test Statistic = 0.448, p-value = 0.8092
+#&gt; Test Statistic = 0.35643, p-value = 0.8981
 #&gt; 
 #&gt; [1] &quot;||======= ANOVA para: agio ; Fazenda: 49 =======||&quot;
 #&gt; ------------------------------------------------------------------------
@@ -3509,7 +3509,7 @@ walk(names_variable, ~{
 #&gt;  deviations from the median
 #&gt; 
 #&gt; data:  y
-#&gt; Test Statistic = 0.84676, p-value = 0.5345
+#&gt; Test Statistic = 0.74218, p-value = 0.6219
 #&gt; 
 #&gt; [1] &quot;||======= ANOVA para: agio ; Fazenda: 146 =======||&quot;
 #&gt; ------------------------------------------------------------------------
@@ -3614,7 +3614,7 @@ walk(names_variable, ~{
 #&gt;  deviations from the median
 #&gt; 
 #&gt; data:  y
-#&gt; Test Statistic = 0.16872, p-value = 0.9709
+#&gt; Test Statistic = 0.18114, p-value = 0.9789
 #&gt; 
 #&gt; [1] &quot;||======= ANOVA para: atr ; Fazenda: 49 =======||&quot;
 #&gt; ------------------------------------------------------------------------
@@ -3721,7 +3721,7 @@ walk(names_variable, ~{
 #&gt;  deviations from the median
 #&gt; 
 #&gt; data:  y
-#&gt; Test Statistic = 0.84602, p-value = 0.535
+#&gt; Test Statistic = 0.74153, p-value = 0.6224
 #&gt; 
 #&gt; [1] &quot;||======= ANOVA para: atr ; Fazenda: 146 =======||&quot;
 #&gt; ------------------------------------------------------------------------
@@ -3826,7 +3826,7 @@ walk(names_variable, ~{
 #&gt;  deviations from the median
 #&gt; 
 #&gt; data:  y
-#&gt; Test Statistic = 0.17904, p-value = 0.967</code></pre>
+#&gt; Test Statistic = 0.19108, p-value = 0.9759</code></pre>
 </div>
 
 
