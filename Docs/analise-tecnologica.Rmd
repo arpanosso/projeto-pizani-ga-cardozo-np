@@ -6,25 +6,97 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  warning = FALSE,
+  error = FALSE,
+  message = FALSE,
+  comment = "#>"
+)
 ```
 
-## R Markdown
-
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
+#### Carregando Pacotes
+```{r}
+library(tidyverse)
+library(agricolae)
+library(ExpDes.pt)
 ```
 
-## Including Plots
 
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
+#### Carregando o Banco de dados
+```{r}
+data_set <- read_rds("../data/data-set-tecnologica.rds") |> 
+  group_by(faz,dose,bloco) |> 
+  summarise(across(
+    .cols = peso:atr,
+    .fns = mean,na.rm=TRUE,
+    .names = "{.col}"
+  )) |> 
+  ungroup()
+glimpse(data_set)
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+#### Análise de Variância - com teste de pressupostos
+
+```{r}
+names_variable <- data_set |> select(peso:atr) |> names()
+walk(names_variable, ~{
+  data_set_aux <- data_set |> 
+    select(c(faz:bloco,!!sym(.x))) |> 
+    mutate(
+      trat = as_factor(dose) 
+    ) |> 
+    drop_na()
+  fazenda <- data_set_aux |> pull(faz) |> unique()
+  for(i in seq_along(fazenda)){
+    df_aux <- data_set_aux |> 
+      filter(faz == fazenda[i])
+    y <- df_aux  |> pull(!!sym(.x))
+    trat <- df_aux  |> pull(trat)
+    bloco <- df_aux  |> pull(bloco)
+    mod_dbc <- aov(y ~ trat + bloco)
+    print(paste("||======= ANOVA para:",.x,"; Fazenda:",fazenda[i],"=======||"))
+    dbc(trat,bloco,y,mcomp = "tukey")
+    
+    print(paste("||======= REGRESSAO para:",.x,"; Fazenda:",fazenda[i],"=======||"))
+    df_aux <- data_set_aux |> 
+      filter(faz == fazenda[i],
+             dose != 999
+             )
+    y <- df_aux  |> pull(!!sym(.x))
+    trat <- df_aux  |> pull(trat)
+    bloco <- df_aux  |> pull(bloco)
+    dbc(trat,bloco,y,quali = FALSE, mcomp = "tukey")
+    
+    plot_reg <- df_aux |> 
+      group_by(dose) |> 
+      summarise(
+        media = mean(!!sym(.x))
+      ) |> 
+      ggplot(aes(x = dose, y = media)) +
+      geom_point(size = 3) +
+      labs(
+        y = .x,
+        x = "Dose",
+      ) +
+      theme_minimal()
+    print(plot_reg)
+    
+    print("------Pressuposicao: Normalidade dos residuos")
+    rs <- rstudent(mod_dbc)
+    print(hist(rs))
+    print(shapiro.test(rs))
+    print("------Pressuposição: Homogeneidade das variancias")
+    plot_boxplot <- df_aux |> 
+      ggplot(aes(y=!!sym(.x), x=trat, fill=trat)) + 
+      geom_boxplot() +
+      theme_bw()
+    print(plot_boxplot)
+    print(lawstat::levene.test(y,trat,location = "median"))
+    
+    
+  }
+})
+
+```
+

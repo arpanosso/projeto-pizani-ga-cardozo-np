@@ -18,10 +18,18 @@ knitr::opts_chunk$set(
 
 Pizani, GA; Panosso, AR; Cardozo, NP; Silva, MA
 
+    - de altura até ATR temos as repetições por parcela - então tem que fazer média;
+    - de TCH1 a TAH6 - temos uma amostragem por bloco, totalizando 64 parcelas (8 tratamentos * 4 blocos * 2 Faz);
+    - de A até T° foliar - temos 256 amostras provavelmente (8 tratamentos * 4 blocos * 2 faz* 4 datas de amostragem) - então é uma análise no tempo;
+    - de SPS até Ni - temos 320 observações provavelmente (8 tratamentos * 4 blocos * 2 faz* 5 datas de amostragem) - então é uma análise no tempo;
 
 ### [Análise tecnológica](https://arpanosso.github.io/projeto-pizani-ga-cardozo-np/Docs/analise-tecnologica.html)
+### [Produção](https://arpanosso.github.io/projeto-pizani-ga-cardozo-np/Docs/producao.html)
+### [Análise Trocas Gasosas](https://arpanosso.github.io/projeto-pizani-ga-cardozo-np/Docs/analise-trocas-gasosas.html)
+### [Análise enzimática](https://arpanosso.github.io/projeto-pizani-ga-cardozo-np/Docs/analise-enzimatica.html)
 
-## Carregando Pacotes
+### Análise de variância - Primeira Rodada
+#### Carregando Pacotes
 ```{r}
 library(tidyverse)
 library(agricolae)
@@ -29,19 +37,19 @@ library(ExpDes.pt)
 ```
 
 
-## Carregando o Banco de dados
+#### Carregando o Banco de dados
 ```{r}
 data_set <- read_rds("data/data-set-principal.rds")
 glimpse(data_set)
 ```
 
-## Início da validação dos dados
+#### Validação dos dados
 ```{r}
 skimr::skim(data_set)
 ```
 
 
-## Análise de variância para `e_n` no delineamento em blocos casualizados
+#### Análise de variância para `e_n` no delineamento em blocos casualizados
 
 nesse delineamento consideramos dois efeitos, o de bloco e o dos tratamentos, a partir do seguinte modelo de anova (teste F de Snedecor ao nível de $5\%$ de probabilidade)
 
@@ -52,7 +60,7 @@ Pressupostos:
   3. Erros são normais  
   4. Existe igualdade entre as variâncias dos tratamentos (homocedasticidade)  
 
-### Recorte do banco de dados
+##### Recorte do banco de dados
 ```{r}
 data_set_aux <- data_set |> 
   select(c(faz:bloco,e_n)) |> 
@@ -63,7 +71,7 @@ data_set_aux <- data_set |>
 glimpse(data_set_aux)
 ```
 
-### Gerar o modelo previamento definido
+#### Gerar o modelo previamente definido
 
 ```{r}
 mod_dbc <- aov(e_n ~ trat + bloco,
@@ -73,7 +81,7 @@ anova(mod_dbc)
 
 ![](img/img-01-Ftest.png)
 
-### Teste de Pessuposto: Normalidade dos resíduos
+#### Teste de Pressuposto: Normalidade dos resíduos
 
 $H_0$: Os dados de resíduos studentizados seguem uma distribuição normal
 
@@ -85,7 +93,7 @@ hist(rs)
 shapiro.test(rs)
 ```
 
-### Teste de Pessuposto: Homocedasticidade (igualdade entre as variâncias dos tratamentos)
+### Teste de Pressuposto: Homocedasticidade (igualdade entre as variâncias dos tratamentos)
 
 ```{r}
 data_set_aux |> 
@@ -105,7 +113,7 @@ trat <- data_set_aux |> pull(trat)
 lawstat::levene.test(y,trat,location = "median")
 ```
 
-## Teste F como Tukey
+#### Teste F e teste de separação de médias (Tukey)
 ```{r}
 y <- data_set_aux |> pull(e_n)
 trat <- data_set_aux |> pull(trat)
@@ -113,7 +121,7 @@ bloco <- data_set_aux |> pull(bloco)
 ExpDes.pt::dbc(trat, bloco, y, quali = TRUE, mcomp = "tukey")
 ```
 
-### Regressão das doses
+### Análise de Regressão para Doses
 
 ```{r}
 data_set_aux |> 

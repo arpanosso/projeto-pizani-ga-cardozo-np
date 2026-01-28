@@ -5,9 +5,22 @@
 
 Pizani, GA; Panosso, AR; Cardozo, NP; Silva, MA
 
+    - de altura até ATR temos as repetições por parcela - então tem que fazer média;
+    - de TCH1 a TAH6 - temos uma amostragem por bloco, totalizando 64 parcelas (8 tratamentos * 4 blocos * 2 Faz);
+    - de A até T° foliar - temos 256 amostras provavelmente (8 tratamentos * 4 blocos * 2 faz* 4 datas de amostragem) - então é uma análise no tempo;
+    - de SPS até Ni - temos 320 observações provavelmente (8 tratamentos * 4 blocos * 2 faz* 5 datas de amostragem) - então é uma análise no tempo;
+
 ### [Análise tecnológica](https://arpanosso.github.io/projeto-pizani-ga-cardozo-np/Docs/analise-tecnologica.html)
 
-## Carregando Pacotes
+### [Produção](https://arpanosso.github.io/projeto-pizani-ga-cardozo-np/Docs/producao.html)
+
+### [Análise Trocas Gasosas](https://arpanosso.github.io/projeto-pizani-ga-cardozo-np/Docs/analise-trocas-gasosas.html)
+
+### [Análise enzimática](https://arpanosso.github.io/projeto-pizani-ga-cardozo-np/Docs/analise-enzimatica.html)
+
+### Análise de variância - Primeira Rodada
+
+#### Carregando Pacotes
 
 ``` r
 library(tidyverse)
@@ -15,7 +28,7 @@ library(agricolae)
 library(ExpDes.pt)
 ```
 
-## Carregando o Banco de dados
+#### Carregando o Banco de dados
 
 ``` r
 data_set <- read_rds("data/data-set-principal.rds")
@@ -35,7 +48,7 @@ glimpse(data_set)
 #> $ e_n_medio    <dbl> NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, Na…
 ```
 
-## Início da validação dos dados
+#### Validação dos dados
 
 ``` r
 skimr::skim(data_set)
@@ -82,7 +95,7 @@ Data summary
 |:---|---:|---:|:---|:---|:---|---:|
 | data | 0 | 1 | 2025-03-17 | 2025-05-26 | 2025-04-21 12:00:00 | 6 |
 
-## Análise de variância para `e_n` no delineamento em blocos casualizados
+#### Análise de variância para `e_n` no delineamento em blocos casualizados
 
 nesse delineamento consideramos dois efeitos, o de bloco e o dos
 tratamentos, a partir do seguinte modelo de anova (teste F de Snedecor
@@ -94,7 +107,7 @@ $$y_{ij} = \mu + \alpha_i + \beta_j + \epsilon_{ij}$$ Pressupostos:
 4. Existe igualdade entre as variâncias dos tratamentos
 (homocedasticidade)
 
-### Recorte do banco de dados
+##### Recorte do banco de dados
 
 ``` r
 data_set_aux <- data_set |> 
@@ -113,7 +126,7 @@ glimpse(data_set_aux)
 #> $ e_n   <dbl> 32.66667, 34.33333, 33.00000, 35.66667, 32.33333, 33.66667, 32.6…
 ```
 
-### Gerar o modelo previamento definido
+#### Gerar o modelo previamente definido
 
 ``` r
 mod_dbc <- aov(e_n ~ trat + bloco,
@@ -130,7 +143,7 @@ anova(mod_dbc)
 
 ![](img/img-01-Ftest.png)
 
-### Teste de Pessuposto: Normalidade dos resíduos
+#### Teste de Pressuposto: Normalidade dos resíduos
 
 $H_0$: Os dados de resíduos studentizados seguem uma distribuição normal
 
@@ -153,7 +166,7 @@ shapiro.test(rs)
 #> W = 0.96483, p-value = 0.06498
 ```
 
-### Teste de Pessuposto: Homocedasticidade (igualdade entre as variâncias dos tratamentos)
+### Teste de Pressuposto: Homocedasticidade (igualdade entre as variâncias dos tratamentos)
 
 ``` r
 data_set_aux |> 
@@ -181,7 +194,7 @@ lawstat::levene.test(y,trat,location = "median")
 #> Test Statistic = 1.6996, p-value = 0.1278
 ```
 
-## Teste F como Tukey
+#### Teste F e teste de separação de médias (Tukey)
 
 ``` r
 y <- data_set_aux |> pull(e_n)
@@ -224,7 +237,7 @@ ExpDes.pt::dbc(trat, bloco, y, quali = TRUE, mcomp = "tukey")
 #> ------------------------------------------------------------------------
 ```
 
-### Regressão das doses
+### Análise de Regressão para Doses
 
 ``` r
 data_set_aux |> 
