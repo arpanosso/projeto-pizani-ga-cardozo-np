@@ -5,6 +5,8 @@
 
 Pizani, GA; Panosso, AR; Cardozo, NP; Silva, MA
 
+### [Análise tecnológica](https://arpanosso.github.io/projeto-pizani-ga-cardozo-np/Docs/analise-tecnologica.html)
+
 ## Carregando Pacotes
 
 ``` r
