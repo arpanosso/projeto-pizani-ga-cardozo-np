@@ -35,25 +35,22 @@ glimpse(data_set)
 names_variable <- data_set |> select(tch_media:tah_media) |> names()
 walk(names_variable, ~{
   data_set_aux <- data_set |> 
-    select(c(faz:bloco,!!sym(.x))) |> 
+    select(c(trat:bloco,!!sym(.x))) |> 
     mutate(
       trat = as_factor(trat) 
     ) |> 
     drop_na()
-  fazenda <- data_set_aux |> pull(faz) |> unique()
-  for(i in seq_along(fazenda)){
-    df_aux <- data_set_aux |> 
-      filter(faz == fazenda[i])
+    df_aux <- data_set_aux 
     y <- df_aux  |> pull(!!sym(.x))
     trat <- df_aux  |> pull(trat)
     bloco <- df_aux  |> pull(bloco)
     mod_dbc <- aov(y ~ trat + bloco)
-    print(paste("||======= ANOVA para:",.x,"; Fazenda:",fazenda[i],"=======||"))
+    print(paste("||======= ANOVA para:",.x,"=======||"))
     dbc(trat,bloco,y,mcomp = "tukey")
     
-    print(paste("||======= REGRESSAO para:",.x,"; Fazenda:",fazenda[i],"=======||"))
+    print(paste("||======= REGRESSAO para:",.x,"=======||"))
     df_aux <- data_set_aux |> 
-      filter(faz == fazenda[i],
+      filter(
              dose != 999
              )
     yd <- df_aux  |> pull(!!sym(.x))
@@ -79,16 +76,13 @@ walk(names_variable, ~{
     rs <- rstudent(mod_dbc)
     print(hist(rs))
     print(shapiro.test(rs))
-    print("------Pressuposição: Homogeneidade das variancias")
+    print("------Pressuposicao: Homogeneidade das variancias")
     plot_boxplot <- df_aux |> 
       ggplot(aes(y=!!sym(.x), x=trat, fill=trat)) + 
       geom_boxplot() +
       theme_bw()
     print(plot_boxplot)
     print(lawstat::levene.test(y,trat,location = "median"))
-    
-    
-  }
 })
 
 ```
