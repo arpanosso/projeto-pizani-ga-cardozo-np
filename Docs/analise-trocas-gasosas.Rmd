@@ -1,0 +1,98 @@
+---
+title: "Análise Trocas Gasosas"
+author: "Panosso, AR"
+date: "2026-01-29"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  warning = FALSE,
+  error = FALSE,
+  message = FALSE,
+  comment = "#>"
+)
+```
+
+#### Carregando Pacotes
+```{r}
+library(tidyverse)
+library(agricolae)
+library(ExpDes.pt)
+```
+
+
+#### Carregando o Banco de dados
+```{r}
+data_set <- read_rds("../data/data-set-trocas-gasosas.rds")
+glimpse(data_set)
+```
+
+#### Análise de Variância - com teste de pressupostos
+
+```{r}
+names_variable <- data_set |> select(a:t_foliar) |> names()
+walk(names_variable, ~{
+  data_set_aux <- data_set |> 
+    select(c(data:bloco,!!sym(.x))) |> 
+    mutate(
+      trat = as_factor(dose) 
+    ) |> 
+    drop_na()
+  fazenda <- data_set_aux |> pull(faz) |> unique()
+  for(i in seq_along(fazenda)){
+    df_aux <- data_set_aux |> 
+      filter(faz == fazenda[i])
+    y <- df_aux  |> pull(!!sym(.x))
+    trat <- df_aux  |> pull(trat)
+    bloco <- df_aux  |> pull(bloco)
+    data <- df_aux  |> pull(data) |> as.character() |> as_factor()
+    fator <- interaction(trat,data)
+    mod_dbc <- aov(y ~ fator + bloco)
+    print(paste("||======= ANOVA para:",.x,"; Fazenda:",fazenda[i],"=======||"))
+    psub2.dbc(trat,data,bloco,y,mcomp = "tukey",sigF = .2,fac.names = c("Trat","Data"))
+
+    print(paste("||======= REGRESSAO para:",.x,"; Fazenda:",fazenda[i],"=======||"))
+    df_aux <- data_set_aux |>
+      filter(faz == fazenda[i],
+             dose != 999
+      )
+    yd <- df_aux  |> pull(!!sym(.x))
+    dose <- df_aux  |> pull(dose) |> as.numeric()
+    data <- df_aux  |> pull(data) |> as.character() |> as_factor()
+    bloco <- df_aux  |> pull(bloco)
+    psub2.dbc(dose,data,bloco,yd,quali = c(FALSE,TRUE),mcomp = "tukey",sigF = .1,fac.names = c("Dose","Data"))
+
+    plot_reg <- df_aux |>
+      group_by(data,dose) |>
+      summarise(
+        media = mean(!!sym(.x))
+      ) |>
+      ggplot(aes(x = data, y = media,color=as_factor(dose))) +
+      geom_line() +
+      labs(
+        y = .x,
+        x = "Data",
+        color = "Dose"
+      ) +
+      theme_minimal()
+    print(plot_reg)
+
+    print("------Pressuposicao: Normalidade dos residuos")
+    rs <- rstudent(mod_dbc)
+    print(hist(rs))
+    print(shapiro.test(rs))
+    print("------Pressuposição: Homogeneidade das variancias")
+    plot_boxplot <- df_aux |>
+      ggplot(aes(y=!!sym(.x), x=trat, fill=trat)) +
+      geom_boxplot() +
+      theme_bw()
+    print(plot_boxplot)
+    print(lawstat::levene.test(y,trat,location = "median"))
+
+    
+  }
+})
+
+```
