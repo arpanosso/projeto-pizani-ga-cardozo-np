@@ -10,13 +10,27 @@ Pizani, GA; Panosso, AR; Cardozo, NP; Silva, MA
     - de A até T° foliar - temos 256 amostras provavelmente (8 tratamentos * 4 blocos * 2 faz* 4 datas de amostragem) - então é uma análise no tempo;
     - de SPS até Ni - temos 320 observações provavelmente (8 tratamentos * 4 blocos * 2 faz* 5 datas de amostragem) - então é uma análise no tempo;
 
-### [Análise tecnológica](https://arpanosso.github.io/projeto-pizani-ga-cardozo-np/Docs/analise-tecnologica.html)
+## ANOVAs por Fazendas
 
-### [Produção](https://arpanosso.github.io/projeto-pizani-ga-cardozo-np/Docs/producao.html)
+### [Análise Tecnológica](https://arpanosso.github.io/projeto-pizani-ga-cardozo-np/Docs/analise-tecnologica.html)
+
+### [Análise Produção](https://arpanosso.github.io/projeto-pizani-ga-cardozo-np/Docs/producao.html)
 
 ### [Análise Trocas Gasosas](https://arpanosso.github.io/projeto-pizani-ga-cardozo-np/Docs/analise-trocas-gasosas.html)
 
-### [Análise enzimática](https://arpanosso.github.io/projeto-pizani-ga-cardozo-np/Docs/analise-enzimatica.html)
+### [Análise Enzimática](https://arpanosso.github.io/projeto-pizani-ga-cardozo-np/Docs/analise-enzimatica.html)
+
+## ANOVAs dados combinados das Fazendas
+
+### [Análise Tecnológica](https://arpanosso.github.io/projeto-pizani-ga-cardozo-np/Docs/analise-tecnologica-faz.html)
+
+### [Análise Produção](https://arpanosso.github.io/projeto-pizani-ga-cardozo-np/Docs/producao-faz.html)
+
+### [Análise Trocas Gasosas](https://arpanosso.github.io/projeto-pizani-ga-cardozo-np/Docs/analise-trocas-gasosas-faz.html)
+
+### [Análise Enzimática](https://arpanosso.github.io/projeto-pizani-ga-cardozo-np/Docs/analise-enzimatica-faz.html)
+
+## Análise Multivariada
 
 ### Análise de variância - Primeira Rodada
 

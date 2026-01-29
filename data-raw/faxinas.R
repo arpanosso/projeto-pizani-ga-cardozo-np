@@ -85,7 +85,9 @@ write_rds(bases_tecnologica, "data/data-set-tecnologica.rds")
 # CRIANDO A BASE PRODUCAO
 bases_producao <- dados |>
   filter(tipo == "producao") |>
-  select(id:parcela,tch1:tah6)
+  select(id:parcela,tch1:tah6) |>
+  mutate(tch_media = (tch1+tch2+tch3+tch4+tch5+tch6)/6 ,
+         tah_media = (tah1+tah2+tah3+tah4+tah5+tah6)/6)
 glimpse(bases_producao)
 
 ## salvando o banco de dados para análise
