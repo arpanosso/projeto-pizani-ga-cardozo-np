@@ -1,5 +1,5 @@
 ---
-title: "Análise Produção"
+title: "Análise Produção (por fazenda)"
 author: "Panosso, AR"
 date: "2026-01-28"
 output: html_document
@@ -21,7 +21,6 @@ library(tidyverse)
 library(agricolae)
 library(ExpDes.pt)
 ```
-
 
 #### Carregando o Banco de dados
 ```{r}
@@ -90,5 +89,4 @@ walk(names_variable, ~{
     
   }
 })
-
 ```

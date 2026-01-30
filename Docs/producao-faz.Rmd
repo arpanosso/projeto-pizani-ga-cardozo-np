@@ -56,8 +56,8 @@ walk(names_variable, ~{
     yd <- df_aux  |> pull(!!sym(.x))
     dose <- df_aux  |> pull(dose) |> as.numeric()
     bloco <- df_aux  |> pull(bloco)
-    dbc(dose,bloco,yd,quali = FALSE, mcomp = "tukey")
-    
+    dbc(dose, bloco, yd, quali = FALSE, mcomp = "tukey")
+
     plot_reg <- df_aux |> 
       group_by(dose) |> 
       summarise(

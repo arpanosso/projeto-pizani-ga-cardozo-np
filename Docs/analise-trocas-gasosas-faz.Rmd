@@ -25,7 +25,11 @@ library(ExpDes.pt)
 
 #### Carregando o Banco de dados
 ```{r}
-data_set <- read_rds("../data/data-set-trocas-gasosas.rds")
+data_set <- read_rds("../data/data-set-trocas-gasosas.rds")|>
+  mutate(
+    tempo = as.numeric(data - min(data, na.rm = TRUE))+1,
+    .after = data
+  )
 glimpse(data_set)
 ```
 
@@ -50,7 +54,15 @@ walk(names_variable, ~{
     print(paste("||======= ANOVA para:",.x,"=======||"))
     psub2.dbc(trat,data,bloco,y,mcomp = "tukey",sigF = .1,fac.names = c("Trat","Data"))
 
-
+  print(paste("||======= REGRESSAO para:",.x,"=======||"))
+  df_aux <- data_set_aux |>
+    filter(dose != 999)
+  yd <- df_aux  |> pull(!!sym(.x))
+  dose <- df_aux  |> pull(dose) |> as.numeric()
+  data <- df_aux  |> pull(data) |> as.character() |> as_factor()
+  tempo <-  df_aux  |> pull(tempo)
+  bloco <- df_aux  |> pull(bloco)
+  psub2.dbc(dose,tempo,bloco,yd,quali = c(TRUE,FALSE),mcomp = "tukey",sigF = .1,fac.names = c("Dose","Data"))
     plot_reg <- df_aux |>
       group_by(data,trat) |>
       summarise(
